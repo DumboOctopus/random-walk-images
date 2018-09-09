@@ -93,8 +93,8 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--colors", help="File path to a colors document")
     parser.add_argument("-f", "--file", help="File path for the picture. Please provide .jgp extention", default="drawn_image.jpg")
     parser.add_argument("-i", "--iterations", help="Number of iterations of all walkers", type=int, default=10000)
-    parser.add_argument("--width", help="Width of Image", default=12*50)
-    parser.add_argument("--height", help="Width of Image", default=18*50)
+    parser.add_argument("--width", help="Width of Image", type=int, default=12*50)
+    parser.add_argument("--height", help="Width of Image", type=int, default=18*50)
     parser.add_argument("-b", "--background", help="Background color", metavar='B', nargs=3, type=int, default = [255,255,255])
 
     args = parser.parse_args()

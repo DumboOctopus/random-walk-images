@@ -4,6 +4,8 @@ It involves a Walker which decides whether to go left, right, up, down, etc base
 on a random function. As the Walker travels, it marks its path and we see a nice,
 random looking pattern show up. The more 'random' it looks, the better the random
 algorithm is.
+![Alt text](decent-images/thumbnail.jpg?raw=true "Title")
+Produced with `python rwalk.py --width 700 --height 500 -c colors.txt -i 500_00 -b 200 200 200 -f decent-images/thumbnail.jpg`
 ## Why this exists
 I thought it looked nice so I wanted to print it on a poster. So I wrote this program to do the hard work of being artistic for me.
 
@@ -24,4 +26,4 @@ I thought it looked nice so I wanted to print it on a poster. So I wrote this pr
 ```
   $ python rwalk.py
 ```
-  See `python rwalk.py -h` for a list of all the options. 
+  See `python rwalk.py -h` for a list of all the options.
