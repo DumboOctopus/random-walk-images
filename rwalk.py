@@ -10,6 +10,8 @@ import sys
 from ast import literal_eval
 import re
 import argparse
+import time
+
 
 class Walker:
     lock = Lock()
@@ -86,16 +88,17 @@ def parse_color_file_line(line):
 if __name__ == "__main__":
 
 
-
+    default_file_name = "out/"+str(int(round(time.time() * 1000)))+"drawn_image.jpg"
     # handle arguments
     parser = argparse.ArgumentParser(description='Create some random walk images')
-    parser.add_argument("--thread", help="Use a seperate thread for each random walker color. May be faster on some computers", action="store_true")
-    parser.add_argument("-c", "--colors", help="File path to a colors document")
-    parser.add_argument("-f", "--file", help="File path for the picture. Please provide .jgp extention", default="drawn_image.jpg")
+    parser.add_argument("--thread", help="Use a seperate thread for each random walker color. May be faster on some computers. Additionally, it makes the colors mesh together instead of overlap", action="store_true")
+    parser.add_argument("-c", "--colors", help="File path to a colors document. See colors.txt for syntax. Default is to have one black walker originating from the center")
+    parser.add_argument("-f", "--file", help="File path for the picture. Please provide .jpg extention", default=default_file_name)
     parser.add_argument("-i", "--iterations", help="Number of iterations of all walkers", type=int, default=10000)
     parser.add_argument("--width", help="Width of Image", type=int, default=12*50)
     parser.add_argument("--height", help="Width of Image", type=int, default=18*50)
     parser.add_argument("-b", "--background", help="Background color", metavar='B', nargs=3, type=int, default = [255,255,255])
+    parser.add_argument("-noshow", action="store_true", help="Do not open the image after generating it. This is useful when you create large images which might cause your image viewer to crash.")
 
     args = parser.parse_args()
 
@@ -117,6 +120,8 @@ if __name__ == "__main__":
                 walkers.append(Walker(args.width, args.height, img_draw, color, iterations=args.iterations, random_position=random_position))
 
             i+=1
+
+        file.close()
     if args.iterations:
         for walker in walkers:
             walker.iterations = args.iterations
@@ -146,5 +151,7 @@ if __name__ == "__main__":
 
 
     blank_image.save(filename)
-    import webbrowser
-    webbrowser.open(filename)
+    blank_image.close()
+    if not args.noshow:
+        import webbrowser
+        webbrowser.open(filename)
