@@ -1,4 +1,5 @@
 # Random Walk
+![python rwalk.py --width 1000 --height 100 -c colors.txt -i 20000 -b 40 40 40](decent-images/banner.jpg?raw=true "python rwalk.py --width 1000 --height 100 -c colors.txt -i 20_000 -b 40 40 40")
 A random walk is a visual used to see how 'random' and algorithm is.
 It involves a Walker which decides whether to go left, right, up, down, etc based
 on a random function. As the Walker travels, it marks its path and we see a nice,
