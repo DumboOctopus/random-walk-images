@@ -1,8 +1,3 @@
-'''
-from PIL import Image, ImageDraw
-im = Image.fromarray(A, mode="CMYK")
-im.save("your_file.jpeg")
-'''
 from PIL import Image, ImageDraw, ImageColor
 import random
 from threading import Lock, Thread
@@ -11,12 +6,11 @@ from ast import literal_eval
 import re
 import argparse
 import time
+import tqdm
 
 
 class Walker:
-    lock = Lock()
     size = 1
-
     def __init__(self, width, height, img_draw, color, iterations=1000, random_position=False):
         self.width = width
         self.height = height
@@ -30,23 +24,14 @@ class Walker:
         self.color = color
         self.iterations = iterations
 
-    def full_walk(self, lock=True):
-        if lock:
-            for i in range(self.iterations):
-                self.draw_step_with_lock()
-        else:
-            for i in range(self.iterations):
-                self.draw_step_without_lock()
+    def full_walk(self):
+        for i in tqdm.trange(self.iterations, desc="Color "+str(self.color)):
+            self.draw_step()
 
-    def draw_step_with_lock(self):#, debug_number=None):
+    def draw_step(self):
         self.walk()
-        with Walker.lock:
-            self.img_draw.rectangle((self.x, self.y, self.x + Walker.size, self.y + Walker.size),fill=self.color,outline=self.color)
-
-    def draw_step_without_lock(self):
-        self.walk()
-        self.img_draw.rectangle((self.x, self.y, self.x + Walker.size, self.y + Walker.size),fill=self.color,outline=self.color)
-
+#        self.img_draw.rectangle((self.x, self.y, self.x + Walker.size, self.y + Walker.size),fill=self.color,outline=self.color)
+        self.img_draw.point((self.x, self.y), fill=self.color)
 
     def walk(self):
 
@@ -67,13 +52,11 @@ class WalkerThread(Thread):
     def __init__(self, walker):
       Thread.__init__(self)
       self.walker = walker
-      self.number = WalkerThread.counter
+      self.id = WalkerThread.counter
       WalkerThread.counter +=1
 
     def run(self):
-        print(str(self.number) + ":Running")
         self.walker.full_walk()
-        print(str(self.number) + "-----------Finished-----------")
 
 line_pattern = re.compile(r"\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*(random)?")
 def parse_color_file_line(line):
@@ -88,17 +71,16 @@ def parse_color_file_line(line):
 if __name__ == "__main__":
 
 
-    default_file_name = "out/"+str(int(round(time.time() * 1000)))+"drawn_image.jpg"
     # handle arguments
     parser = argparse.ArgumentParser(description='Create some random walk images')
     parser.add_argument("--thread", help="Use a seperate thread for each random walker color. May be faster on some computers. Additionally, it makes the colors mesh together instead of overlap", action="store_true")
     parser.add_argument("-c", "--colors", help="File path to a colors document. See colors.txt for syntax. Default is to have one black walker originating from the center")
-    parser.add_argument("-f", "--file", help="File path for the picture. Please provide .jpg extention", default=default_file_name)
+    parser.add_argument("-f", "--file", help="File path for the picture. Please provide .jpg extention")
     parser.add_argument("-i", "--iterations", help="Number of iterations of all walkers", type=int, default=10000)
     parser.add_argument("--width", help="Width of Image", type=int, default=12*50)
     parser.add_argument("--height", help="Width of Image", type=int, default=18*50)
     parser.add_argument("-b", "--background", help="Background color", metavar='B', nargs=3, type=int, default = [255,255,255])
-    parser.add_argument("-noshow", action="store_true", help="Do not open the image after generating it. This is useful when you create large images which might cause your image viewer to crash.")
+    parser.add_argument("--noshow", action="store_true", help="Do not open the image after generating it. This is useful when you create large images which might cause your image viewer to crash.")
 
     args = parser.parse_args()
 
@@ -127,6 +109,8 @@ if __name__ == "__main__":
             walker.iterations = args.iterations
     if args.file:
         filename = args.file
+    else:
+        filename = 'out/RWALK'+str(int(round(time.time() * 1000)))+f'with {args.background} {args.iterations} {args.colors} {"threaded" if args.thread else ""}.jpg'
 
     # assign default values if they weren't assigned by arguments
     if len(walkers) < 1:
@@ -140,10 +124,12 @@ if __name__ == "__main__":
         for thread in threads: thread.start()
         print("Started threads successfully...")
         for thread in threads: thread.join()
-        print("Done")
+        for thread in threads: print("") # print a new line for each progressbar so it doesn't turn out weird
+        print("\nDone")
     else:
         print("Working on one thread")
-        [walker.full_walk(lock=False) for walker in walkers]
+        #[walker.full_walk(lock=False) for walker in walkers]
+        [walker.full_walk() for walker in walkers]
         print("Done")
         #w1.full_walk(lock=False)
 
