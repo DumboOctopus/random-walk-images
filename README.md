@@ -6,7 +6,7 @@ random looking pattern show up. The more 'random' it looks, the better the rando
 algorithm is.
 ## Why this exists
 I thought it looked nice so I wanted to print it on a poster. So I wrote this program to do the hard work of being artistic for me.
-If you don't believe me, this was one of the images I produced with `python rwalk.py --width 700 --height 500 -c colors.txt -i 500_00 -b 200 200 200 -f decent-images/thumbnail.jpg`
+If you don't believe me, this was one of the images I produced with `python rwalk.py --width 1000 --height 700 -c colors.txt -i 100_000 -b 45 45 45 -f decent-images/thumbnail.jpg`
 
 ![Alt text](decent-images/thumbnail.jpg?raw=true "Title")
 
