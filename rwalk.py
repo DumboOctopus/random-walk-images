@@ -110,7 +110,7 @@ if __name__ == "__main__":
     if args.file:
         filename = args.file
     else:
-        filename = 'out/RWALK'+str(int(round(time.time() * 1000)))+f'with {args.background} {args.iterations} {args.colors} {"threaded" if args.thread else ""}.jpg'
+        filename = 'out/RWALK'+str(int(round(time.time() * 1000)))+f'with {args.background} {args.iterations} {args.colors} {"threaded" if args.thread else ""}.png'
 
     # assign default values if they weren't assigned by arguments
     if len(walkers) < 1:
