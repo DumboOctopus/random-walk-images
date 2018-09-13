@@ -1,0 +1,21 @@
+background:
+  r: 250
+  b: 12
+  g: 12
+width: 1000
+height: 400
+iterations: 100_000
+thread: yes
+noshow: no
+file: out/cool$t.png
+walkers:
+  - walker_name:
+      color: 4d003f
+      position: random
+      iterations: 100
+      # margin-left: 10 for future
+  - name:
+      color: 4d003f
+      position: random
+      iterations: 100
+      # margin-left: 10
