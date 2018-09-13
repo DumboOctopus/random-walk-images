@@ -1,6 +1,0 @@
-
-# https://colorhunt.co/palette/1504
-# (72,70,109) background 
-(61,132,168) 
-(70,205,207) random
-(171,237,216) 

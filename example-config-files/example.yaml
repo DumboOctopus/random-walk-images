@@ -1,0 +1,44 @@
+# Hello. This is an example configuration file.
+# All of these attributes are required.
+# You can have any number of walkers but you must have at least 1
+
+# For all colors, you can either write them like
+# like the one below or as a tuple (r,g,b) or in hex.
+# when you write in hex, put quotes around it so it is
+# not seen as a string
+# Examples:
+
+# background: "00fd3e"
+# background: (12, 230, 123)
+# background:
+#   r: 45
+#   b: 45
+#   g: 45
+
+# background color
+background:
+  r: 45
+  b: 45
+  g: 45
+width: 1000
+height: 700
+iterations: 100_000 # default iterations for all walkers.
+thread: no
+noshow: no
+file: out/example$t.jpg # the $t is replaced with a timestamp. Useful for getting unique filenames
+walkers:
+  - blue: # the names don't matter. It will be used when displaying progress bars
+      color: "#7e93cc"
+      position: random
+      # iterations: 30_000 # setting the iterations for THIS walker to 400_000
+  - yellow:
+      color: (251, 197, 49)
+      position: (250, 250) # coordinates start from upper left hand corner
+      # iterations: 20_000
+  - red:
+      color: (241, 90, 89)
+      position: random
+  - purple:
+      color: (120, 83, 162)
+      position: random
+

@@ -1,0 +1,20 @@
+# https://colorhunt.co/palette/1504
+
+background: (72,70,109)
+width: 900
+height: 1050
+iterations: 200_000
+thread: no
+noshow: no
+file: out/bluepurple$t.png
+walkers:
+  - blue: # the names don't matter. It will be used when displaying progress bars
+      color: (61,132,168)
+      position: center
+      iterations: 70_000
+  - lightblue:
+      color: (70,205,207)
+      position: random
+  - lightestblue:
+      color: (171,237,216)
+      position: random
