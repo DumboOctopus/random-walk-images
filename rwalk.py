@@ -104,7 +104,7 @@ def parse_color(thing):
             m = hex_regex.match(thing)
             return "#"+m.group(1)
     else:
-        raise ParserError(thing, "Unknown format for background color")
+        raise ParserError(thing, "Unknown format for color. ") from None
 
 
 two_tuple_regex = re.compile(r"\(\s*(\d+)\s*,\s*(\d+)\s*,?\)\s*?")
@@ -190,7 +190,7 @@ def determine_configs(parser):
                 except Exception:
                     raise ParserError(str(walker.keys()), "Walker is invalid") from None
         except KeyError as e:
-            raise ParserError("Source: [Whole file]", "Missing attribute " + str(e) + ".")
+            raise ParserError("[Whole file]", "Missing attribute " + str(e) + ".")
         except yaml.YAMLError as exc:
             raise ParserError(str(exc), "Config file is invalid") from None
     # if there wasn't a configuration file then thread, width, etc are equal to stuff from args.
@@ -268,6 +268,8 @@ if __name__ == "__main__":
 
         run(thread, file, width, height, noshow, background, walker_configs)
     except ParserError as e:
-        print("An error occured while parsing the configuaration file")
-        print("\t" + e.expression)
-        print(e.message)
+        FAIL = '\033[91m'
+        ENDC = '\033[0m'
+        print(f"An {FAIL}1 error{ENDC} occured while parsing the configuaration file. Source:")
+        print("\t" + str(e.expression))
+        print(FAIL+e.message+ENDC)

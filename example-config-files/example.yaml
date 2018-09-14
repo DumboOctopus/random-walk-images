@@ -15,7 +15,7 @@
 #   b: 45
 #   g: 45
 
-# background color
+
 background:
   r: 45
   b: 45
@@ -30,11 +30,10 @@ walkers:
   - blue: # the names don't matter. It will be used when displaying progress bars
       color: "#7e93cc"
       position: random
-      # iterations: 30_000 # setting the iterations for THIS walker to 400_000
   - yellow:
       color: (251, 197, 49)
       position: (250, 250) # coordinates start from upper left hand corner
-      # iterations: 20_000
+      iterations: 70_000
   - red:
       color: (241, 90, 89)
       position: random
