@@ -232,11 +232,11 @@ def run(thread, file, width, height, noshow, background, walker_configs):
 
         time.sleep(1)
         # for thread in threads: print("")  # print a new line for each progressbar so it doesn't turn out weird
-        print("\nDone")
+        print("\nDone. Created "+file)
     else:
         print("Working on one thread")
         [walker.full_walk() for walker in walkers]
-        print("Done")
+        print("Done. Created " + file)
 
     blank_image.save(file)
     blank_image.close()
