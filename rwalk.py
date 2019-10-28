@@ -104,7 +104,7 @@ def parse_color(thing):
             m = hex_regex.match(thing)
             return "#"+m.group(1)
     else:
-        raise ParserError(thing, "Unknown format for color. ") from None
+        raise ParserError(thing, "Unknown format for color. ") 
 
 
 two_tuple_regex = re.compile(r"\(\s*(\d+)\s*,\s*(\d+)\s*,?\)\s*?")
@@ -124,6 +124,8 @@ def parse_position(thing, width, height):
                     random.randint(height - int(height * 0.9), int(height * 0.9)))
         elif thing.upper() == 'CENTER':
             return (int(width/2.0), int(height/2.0))
+        else:
+            raise ParserError(thing, "Unknown option for position");
     else:
         raise ParserError(thing, "Unknown format for position")
 
@@ -151,10 +153,11 @@ def determine_configs(parser):
     # Second Read config file if it exists
     if args.config_file:
         try:
-            y = yaml.load(args.config_file)
+            y = yaml.load(args.config_file, Loader=yaml.BaseLoader)
 
+            # print(args.config_file);
             # if they didn't explicitly say to thread, take the value from config.yaml
-            if not args.thread: thread = int(y['thread'])
+            if not args.thread and y['thread'].upper() != "NO": thread = int(y['thread'])
             width = width or int(y['width'])
             height = height or int(y['height'])
             file = file or y['file']
@@ -179,20 +182,24 @@ def determine_configs(parser):
                         name,
                         parse_color(walker[name]['color']),
                         parse_position(walker[name]['position'], width, height),  # if a config file is provided, width exists
-                        walker[name].get('iterations', iterations)
+                        int(walker[name].get('iterations', iterations))
                     )
                     if w.valid():
                         walker_configs.append(w)
                     else:
-                        raise ParserError("Walker " + w.name, "Walker is invalid") from None
+                        raise ParserError("Walker " + w.name, "Walker is invalid") 
                 except KeyError as e:
-                    raise ParserError("Walker '"+name+"' is missing the "+str(e) + " key", "Walker is invalid") from None
+                    raise ParserError("Walker '"+name+"' is missing the "+str(e) + " key", "Walker is invalid") 
+                except ParserError as e:
+                    raise e;
+                except ValueError:
+                    raise ParserError(str(walker[name].get('iterations')), "Is not an int");
                 except Exception:
-                    raise ParserError(str(walker.keys()), "Walker is invalid") from None
+                    raise ParserError(str(walker), "Walker is invalid") 
         except KeyError as e:
             raise ParserError("[Whole file]", "Missing attribute " + str(e) + ".")
         except yaml.YAMLError as exc:
-            raise ParserError(str(exc), "Config file is invalid") from None
+            raise ParserError(str(exc), "Config file is invalid") 
     # if there wasn't a configuration file then thread, width, etc are equal to stuff from args.
 
     # -----------3rd Pass assign Defaults------------------------
@@ -236,7 +243,7 @@ def run(thread, file, width, height, noshow, background, walker_configs):
     else:
         print("Working on one thread")
         [walker.full_walk() for walker in walkers]
-        print("Done. Created " + file)
+        print("Done. Created " + str(file))
 
     blank_image.save(file)
     blank_image.close()
